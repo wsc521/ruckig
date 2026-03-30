@@ -2,7 +2,9 @@
 
 #include <array>
 #include <cmath>
+#ifndef RUCKIG_NO_STDLIB
 #include <iostream>
+#endif
 
 #include <ruckig/utils.hpp>
 

@@ -2,9 +2,7 @@
 
 #include <algorithm>
 #include <limits>
-#include <numeric>
 #include <optional>
-#include <string>
 
 #include <ruckig/profile.hpp>
 
@@ -58,11 +56,6 @@ public:
 
     template<size_t N, bool numerical_robust = true>
     static bool calculate_block(Block& block, std::array<Profile, N>& valid_profiles, size_t valid_profile_counter) {
-        // std::cout << "---\n " << valid_profile_counter << std::endl;
-        // for (size_t i = 0; i < valid_profile_counter; ++i) {
-        //     std::cout << valid_profiles[i].t_sum.back() << " " << valid_profiles[i].to_string() << std::endl;
-        // }
-
         if (valid_profile_counter == 1) {
             block.set_min_profile(valid_profiles[0]);
             return true;
@@ -100,7 +93,7 @@ public:
         }
 
         // Find index of fastest profile
-        const auto idx_min_it = std::min_element(valid_profiles.cbegin(), valid_profiles.cbegin() + valid_profile_counter, [](const Profile& a, const Profile& b) { return a.t_sum.back() < b.t_sum.back(); });
+        const auto idx_min_it = std::min_element(valid_profiles.cbegin(), valid_profiles.cend(), [](const Profile& a, const Profile& b) { return a.t_sum.back() < b.t_sum.back(); });
         const size_t idx_min = std::distance(valid_profiles.cbegin(), idx_min_it);
 
         block.set_min_profile(valid_profiles[idx_min]);
@@ -143,17 +136,6 @@ public:
             return a->profile;
         }
         return p_min;
-    }
-
-    std::string to_string() const {
-        std::string result = "[" + std::to_string(t_min) + " ";
-        if (a) {
-            result += std::to_string(a->left) + "] [" + std::to_string(a->right) + " ";
-        }
-        if (b) {
-            result += std::to_string(b->left) + "] [" + std::to_string(b->right) + " ";
-        }
-        return result + "-";
     }
 };
 

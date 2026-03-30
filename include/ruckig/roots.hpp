@@ -8,6 +8,8 @@
 
 namespace ruckig {
 
+constexpr double PI {3.14159265358979323846};
+
 template<typename T>
 inline T pow2(T v) {
     return v * v;
@@ -119,11 +121,11 @@ inline PositiveSet<double, 3> solve_cubic(double a, double b, double c, double d
 
             // Convert to polar form
             if (std::abs(x) > DBL_EPSILON) {
-                theta = (x > 0.0) ? std::atan(y / x) : (std::atan(y / x) + M_PI);
+                theta = (x > 0.0) ? std::atan(y / x) : (std::atan(y / x) + PI);
                 r = std::sqrt(x * x - yy);
             } else {
                 // Vertical line
-                theta = M_PI / 2;
+                theta = PI / 2;
                 r = y;
             }
             // Calculate cube root
