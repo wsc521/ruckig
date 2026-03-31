@@ -189,7 +189,9 @@ void PositionThirdOrderStep1::time_all_none_acc0_acc1(ProfileIter& profile, doub
         const double orig = -h2_h2/(4*jMax*t) + h2_none*(af/jMax + t) + (4*a0_p3 + 2*af_p3 - 6*a0_a0*(af + 2*jMax*t) + 12*(af - a0)*jMax*v0 + 3*jMax_jMax*(-4*pd + (h1 + 8*v0)*t))/(12*jMax_jMax);
         const double deriv = h2_none + 2*v0 - a0_a0/jMax + h2_h2/(4*h1) + (3*h1)/4;
 
-        t -= orig / deriv;
+        if (std::abs(deriv) > 1e-12) {
+            t -= orig / deriv;
+        }
         
         if (t < 1e-12) continue;
 
@@ -220,7 +222,9 @@ void PositionThirdOrderStep1::time_all_none_acc0_acc1(ProfileIter& profile, doub
         const double orig = h0_acc0/(12*jMax_jMax*t) + t*(h2_acc0 + h1*(h1 - 2*aMax));
         const double deriv = 2*(h2_acc0 + h1*(2*h1 - 3*aMax));
 
-        t -= orig / deriv;
+        if (std::abs(deriv) > 1e-12) {
+            t -= orig / deriv;
+        }
         
         if (t < 1e-12) continue;
 
@@ -251,21 +255,27 @@ void PositionThirdOrderStep1::time_all_none_acc0_acc1(ProfileIter& profile, doub
             double h1 = jMax*t;
             double orig = -(h0_acc1/2 + h1*(h5 + a0*(aMin - 2*h1)*(aMin - h1) + a0_a0*(5*h1/2 - 2*aMin) + aMin*aMin*h1/2 + jMax*(h1/2 - aMin)*(h1*t + 2*v0)))/jMax;
             double deriv = (aMin - a0 - h1)*(h2_acc1 + h1*(4*a0 - aMin + 2*h1));
-            t -= std::min(orig / deriv, t);
+            if (std::abs(deriv) > 1e-12) {
+                t -= std::min(orig / deriv, t);
+            }
 
             h1 = jMax*t;
             orig = -(h0_acc1/2 + h1*(h5 + a0*(aMin - 2*h1)*(aMin - h1) + a0_a0*(5*h1/2 - 2*aMin) + aMin*aMin*h1/2 + jMax*(h1/2 - aMin)*(h1*t + 2*v0)))/jMax;
 
             if (std::abs(orig) > 1e-9) {
                 deriv = (aMin - a0 - h1)*(h2_acc1 + h1*(4*a0 - aMin + 2*h1));
-                t -= orig / deriv;
+                if (std::abs(deriv) > 1e-12) {
+                    t -= orig / deriv;
+                }
 
                 h1 = jMax*t;
                 orig = -(h0_acc1/2 + h1*(h5 + a0*(aMin - 2*h1)*(aMin - h1) + a0_a0*(5*h1/2 - 2*aMin) + aMin*aMin*h1/2 + jMax*(h1/2 - aMin)*(h1*t + 2*v0)))/jMax;
 
                 if (std::abs(orig) > 1e-9) {
                     deriv = (aMin - a0 - h1)*(h2_acc1 + h1*(4*a0 - aMin + 2*h1));
-                    t -= orig / deriv;
+                    if (std::abs(deriv) > 1e-12) {
+                        t -= orig / deriv;
+                    }
                 }
             }
         }
