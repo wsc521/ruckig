@@ -25,7 +25,7 @@ void PositionSecondOrderStep1::time_acc0(ProfileIter& profile, double vMax, doub
 void PositionSecondOrderStep1::time_none(ProfileIter& profile, double vMax, double vMin, double aMax, double aMin, bool return_after_found) const {
     double h1 = (aMax*vf*vf - aMin*v0*v0 - 2*aMax*aMin*pd)/(aMax - aMin);
     if (h1 >= 0.0) {
-        h1 = std::sqrt(h1);
+        h1 = std::sqrt(std::max(0.0, h1));
 
         // Solution 1
         {

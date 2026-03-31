@@ -25,7 +25,7 @@ void VelocityThirdOrderStep1::time_acc0(ProfileIter& profile, double aMax, doubl
 void VelocityThirdOrderStep1::time_none(ProfileIter& profile, double aMax, double aMin, double jMax, bool return_after_found) const {
     double h1 = (a0*a0 + af*af)/2 + jMax*vd;
     if (h1 >= 0.0) {
-        h1 = std::sqrt(h1);
+        h1 = std::sqrt(std::max(0.0, h1));
 
         // Solution 1
         {

@@ -14,7 +14,7 @@ PositionSecondOrderStep2::PositionSecondOrderStep2(double tf, double p0, double 
 bool PositionSecondOrderStep2::time_acc0(Profile& profile, double vMax, double vMin, double aMax, double aMin) {
     // UD Solution 1/2
     {
-        const double h1 = std::sqrt((2*aMax*(pd - tf*vf) - 2*aMin*(pd - tf*v0) + vd*vd)/(aMax*aMin) + tf*tf);
+        const double h1 = std::sqrt(std::max(0.0, (2*aMax*(pd - tf*vf) - 2*aMin*(pd - tf*v0) + vd*vd)/(aMax*aMin) + tf*tf));
 
         profile.t[0] = (aMax*vd - aMax*aMin*(tf - h1))/(aMax*(aMax - aMin));
         profile.t[1] = h1;

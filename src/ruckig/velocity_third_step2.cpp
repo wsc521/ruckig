@@ -14,7 +14,7 @@ VelocityThirdOrderStep2::VelocityThirdOrderStep2(double tf, double v0, double a0
 bool VelocityThirdOrderStep2::time_acc0(Profile& profile, double aMax, double aMin, double jMax) {
     // UD Solution 1/2
     {
-        const double h1 = std::sqrt((-ad*ad + 2*jMax*((a0 + af)*tf - 2*vd))/(jMax*jMax) + tf*tf);
+        const double h1 = std::sqrt(std::max(0.0, (-ad*ad + 2*jMax*((a0 + af)*tf - 2*vd))/(jMax*jMax) + tf*tf));
 
         profile.t[0] = ad/(2*jMax) + (tf - h1)/2;
         profile.t[1] = h1;
