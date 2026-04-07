@@ -976,8 +976,14 @@ bool PositionThirdOrderStep2::time_none(Profile& profile, double vMax, double vM
             if (t > tf) {
                 continue;
             }
+            if (std::abs(tf - t) < roots::tolerance || std::abs(ad) < roots::tolerance) {
+                continue;
+            }
 
             const double jf = ad/(tf - t);
+            if (std::abs(jf) < roots::tolerance || std::abs(t) < roots::tolerance) {
+                continue;
+            }
 
             profile.t[0] = (2*(vd - a0*tf) + ad*(t - tf))/(2*jf*t);
             profile.t[1] = t;
@@ -994,19 +1000,19 @@ bool PositionThirdOrderStep2::time_none(Profile& profile, double vMax, double vM
     }
 
     // 3 step profile (ak. UDU), sometimes missed because of numerical errors
-    {
-        profile.t[0] = (ad_ad/jMax + 2*(a0 + af)*tf - jMax*tf_tf - 4*vd)/(4*(ad - jMax*tf));
-        profile.t[1] = 0;
-        profile.t[2] = -ad/(2*jMax) + tf/2;
-        profile.t[3] = 0;
-        profile.t[4] = 0;
-        profile.t[5] = 0;
-        profile.t[6] = tf - (profile.t[0] + profile.t[2]);
+        if (std::abs(ad - jMax*tf) > roots::tolerance) {
+            profile.t[0] = (ad_ad/jMax + 2*(a0 + af)*tf - jMax*tf_tf - 4*vd)/(4*(ad - jMax*tf));
+            profile.t[1] = 0;
+            profile.t[2] = -ad/(2*jMax) + tf/2;
+            profile.t[3] = 0;
+            profile.t[4] = 0;
+            profile.t[5] = 0;
+            profile.t[6] = tf - (profile.t[0] + profile.t[2]);
 
-        if (profile.check_with_timing<ControlSigns::UDDU, ReachedLimits::NONE>(tf, jMax, vMax, vMin, aMax, aMin)) {
-            return true;
+            if (profile.check_with_timing<ControlSigns::UDDU, ReachedLimits::NONE>(tf, jMax, vMax, vMin, aMax, aMin)) {
+                return true;
+            }
         }
-    }
 
     return false;
 }
